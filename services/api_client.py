@@ -5,6 +5,12 @@ from dateutil.relativedelta import relativedelta
 from config import URL_COTACOES, URL_SELIC_BASE, URL_HISTORICO_BASE
 
 def coletar_dados_moedas():
+    """Coleta as cotações atuais de moedas como Dólar, Euro, e Bitcoin.
+
+    Returns:
+        dict: Dicionário com os nomes legíveis das moedas como chave e os valores convertidos para BRL como valor.
+    """
+    
     url = URL_COTACOES
     
     # Requisição HTTP
@@ -31,6 +37,15 @@ def coletar_dados_moedas():
     return cotacoes
 
 def coletar_taxa_selic():
+    """
+    Coleta as taxas mensais da SELIC dos últimos 6 meses.
+
+    A função acessa a API do Banco Central do Brasil e extrai a taxa SELIC diária.
+    Em seguida, obtem o último valor de cada mês no período analisado.
+
+    Returns:
+        dict: Dicionário no formato {"MM/YYYY": valor}, onde os valores são floats representando a taxa SELIC em cada mês.
+    """
     hoje = datetime.today()
     inicio = (hoje - relativedelta(months=6)).replace(day=1)
     fim = hoje
@@ -63,6 +78,21 @@ def coletar_taxa_selic():
     return selic_mensal
 
 def coletar_historico_moeda(moeda="USD", dias=30):
+    """
+    Coleta o histórico dos últimos dias de uma moeda em relação ao real (BRL).
+
+    A função faz uma requisição a API da AwesomeAPI para obter os valores de 
+    fechamento (bid) de uma moeda, organizados por data. Os dados são processados,
+    tratados e retornados em ordem crescente de data.
+
+    Args:
+        moeda (str): Código da moeda a ser consultada (ex: 'USD', 'EUR', 'BTC').
+        dias (int): Quantidade de dias de histórico a coletar. O padrão é 30 dias.
+
+    Returns:
+        dict: Dicionário no formato {"YYYY-MM-DD": valor}, com os valores da moeda 
+        em BRL para cada data disponível.
+    """    
     url = f"{URL_HISTORICO_BASE}/{moeda}-BRL/{dias}"
     resposta = requests.get(url, timeout=5)
 

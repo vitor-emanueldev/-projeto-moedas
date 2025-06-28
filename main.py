@@ -4,6 +4,23 @@ from utils.logger import configurar_logger
 from datetime import datetime
 
 def main():
+    
+    """
+    Executa o fluxo principal do projeto de coleta de dados e geração de relatório.
+
+    A função realiza as seguintes etapas:
+    1. Configura o sistema de logging.
+    2. Coleta as cotações atuais de moedas.
+    3. Coleta a taxa SELIC dos últimos 6 meses.
+    4. Coleta o histórico do dólar dos últimos 30 dias.
+    5. Gera e salva um relatório em Excel contendo os dados coletados.
+
+    Em caso de erro durante a execução, o log registra a exceção com traceback.
+
+    Returns:
+        None
+    """
+    
     logger = configurar_logger()
 
     try:
